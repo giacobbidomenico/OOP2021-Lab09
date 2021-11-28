@@ -3,8 +3,6 @@ package it.unibo.oop.lab.reactivegui01;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JButton;
@@ -47,19 +45,7 @@ public final class ConcurrentGUI extends JFrame {
         /*
          * Register a listener that stops it
          */
-        stop.addActionListener(new ActionListener() {
-            /**
-             * event handler associated to action event on button stop.
-             * 
-             * @param e
-             *            the action event that will be handled by this listener
-             */
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                // Agent should be final
-                agent.stopCounting();
-            }
-        });
+        stop.addActionListener(e -> agent.stopCounting());
     }
 
     /*
@@ -78,7 +64,7 @@ public final class ConcurrentGUI extends JFrame {
          * 
          */
         private volatile boolean stop;
-        private volatile int counter;
+        private int counter;
 
         @Override
         public void run() {
@@ -88,21 +74,8 @@ public final class ConcurrentGUI extends JFrame {
                      * All the operations on the GUI must be performed by the
                      * Event-Dispatch Thread (EDT)!
                      */
-                    SwingUtilities.invokeAndWait(new Runnable() {
-                        @Override
-                        public void run() {
-                            // This will happen in the EDT: since i'm reading counter it needs to be volatile.
-                            ConcurrentGUI.this.display.setText(Integer.toString(Agent.this.counter));
-                        }
-                    });
-                    /*
-                     * SpotBugs shows a warning because the increment of a volatile variable is not atomic,
-                     * so the concurrent access is potentially not safe. In the specific case of this exercise,
-                     * we do synchronization with invokeAndWait, so it can be ignored.
-                     *
-                     * EXERCISE: Can you think of a solution that doesn't require counter to be volatile? (without
-                     * using synchronized or locks)
-                     */
+                    final String count = Integer.toString(this.counter);
+                    SwingUtilities.invokeAndWait(() -> ConcurrentGUI.this.display.setText(count));
                     this.counter++;
                     Thread.sleep(100);
                 } catch (InvocationTargetException | InterruptedException ex) {

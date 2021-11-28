@@ -13,7 +13,7 @@ import javax.swing.SwingUtilities;
  * Class that implements a reactive GUI.
  */
 public class ConcurrentGUI extends JFrame {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -5415145151L;
     private static final double WIDTH_PERC = 0.2;
     private static final double HEIGHT_PERC = 0.1;
     private final JLabel label = new JLabel();
@@ -49,7 +49,8 @@ public class ConcurrentGUI extends JFrame {
             down.setEnabled(false);
             stop.setEnabled(false);
         });
-        new Thread(agent).start();
+        //new Thread(agent).start();
+        invokeThread(agent);
         /*
          * Set the frame. 
          */
@@ -60,6 +61,13 @@ public class ConcurrentGUI extends JFrame {
         this.setSize(sw, sh);
         this.setLocationByPlatform(true);
         this.setVisible(true);
+    }
+    /**
+     * Method that invoke the Thread.
+     * @param agent
+     */
+    private void invokeThread(final Agent agent) {
+        new Thread(agent).start();
     }
     /**
      * Class that implements the Agent.

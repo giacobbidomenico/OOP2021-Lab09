@@ -12,13 +12,16 @@ import javax.swing.SwingUtilities;
 /**
  * Class that implements a reactive GUI.
  */
-public class ConcurrentGUI {
-    private final JFrame frame = new JFrame();
+public class ConcurrentGUI extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private static final double WIDTH_PERC = 0.2;
+    private static final double HEIGHT_PERC = 0.1;
     private final JLabel label = new JLabel();
     /**
      * Builds a new {@link ConcurrentGUI}.
      */
     public ConcurrentGUI() {
+        super();
         /*
          * Create the main panel.
          */
@@ -33,7 +36,7 @@ public class ConcurrentGUI {
         mainPanel.add(down);
         final JButton stop = new JButton("stop");
         mainPanel.add(stop);
-        frame.setContentPane(mainPanel);
+        this.setContentPane(mainPanel);
         /*
          * Create and set a new Agent. 
          */
@@ -50,13 +53,13 @@ public class ConcurrentGUI {
         /*
          * Set the frame. 
          */
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        final int sw = (int) screen.getWidth();
-        final int sh = (int) screen.getHeight();
-        frame.setSize(sw / 2, sh / 2);
-        frame.setLocationByPlatform(true);
-        frame.setVisible(true);
+        final int sw = (int) (screen.getWidth() * WIDTH_PERC);
+        final int sh = (int) (screen.getHeight() * HEIGHT_PERC);
+        this.setSize(sw, sh);
+        this.setLocationByPlatform(true);
+        this.setVisible(true);
     }
     /**
      * Class that implements the Agent.

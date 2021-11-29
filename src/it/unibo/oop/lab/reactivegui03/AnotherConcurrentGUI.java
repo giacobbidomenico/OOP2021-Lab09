@@ -13,7 +13,7 @@ import javax.swing.SwingUtilities;
 import it.unibo.oop.lab.reactivegui02.WayOfCounting;
 
 /**
- *
+ * Implementation of a reactive gui.
  */
 public class AnotherConcurrentGUI extends JFrame { 
     private static final long serialVersionUID = -5415145151L;
@@ -49,12 +49,13 @@ public class AnotherConcurrentGUI extends JFrame {
         down.addActionListener(e -> agent.setWay(WayOfCounting.DOWN));
         stop.addActionListener(e -> {
             agent.stopCounting();
-            up.setEnabled(false);
-            down.setEnabled(false);
-            stop.setEnabled(false);
+            disableButtons(up, down, stop);
         });
-        //new Thread(agent).start();
         invokeThread(agent);
+        /*
+         * Create a thread that stop the agent after 10 seconds and 
+         * disable the buttons of the gui.
+         */
         final Thread stopAgent = new Thread() {
             @Override
             public void run() {
@@ -65,11 +66,12 @@ public class AnotherConcurrentGUI extends JFrame {
                 }
                 stopRun();
             }
+            /**
+             * Method that stop the agent and disable the buttons of the GUI.
+             */
             private void stopRun() {
                 agent.stopCounting();
-                up.setEnabled(false);
-                down.setEnabled(false);
-                stop.setEnabled(false);
+                disableButtons(up, down, stop);
             }
         };
         invokeThread(stopAgent);
@@ -83,6 +85,16 @@ public class AnotherConcurrentGUI extends JFrame {
         this.setSize(sw, sh);
         this.setLocationByPlatform(true);
         this.setVisible(true);
+    }
+    /**
+     * Method that disable the buttons of the GUI.
+     * @param buttons
+     * @return 
+     */
+    private synchronized void disableButtons(final JButton...buttons) {
+        for (final JButton button : buttons) {
+            button.setEnabled(false);
+        }
     }
     /**
      * Method that invoke the Thread.

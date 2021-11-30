@@ -6,13 +6,13 @@ import java.util.List;
 /**
  *
  */
-public class MultiThreadedSumMatrixClassic implements SumMatrix {
+public class MultiThreadedSumMatrix implements SumMatrix {
     private final int numThreads;
     /**
-     * Builds a new {@link MultiThreadedSumMatrixClassic}.
+     * Builds a new {@link MultiThreadedSumMatrix}.
      * @param numThreads
      */
-    public MultiThreadedSumMatrixClassic(final int numThreads) {
+    public MultiThreadedSumMatrix(final int numThreads) {
         if (numThreads < 1) {
             throw new IllegalStateException("Number of thread incorrect");
         }

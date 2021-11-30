@@ -13,6 +13,9 @@ public class MultiThreadedSumMatrixClassic implements SumMatrix {
      * @param numThreads
      */
     public MultiThreadedSumMatrixClassic(final int numThreads) {
+        if (numThreads < 1) {
+            throw new IllegalStateException("Number of thread incorrect");
+        }
         this.numThreads = numThreads;
     }
     /**
@@ -25,6 +28,7 @@ public class MultiThreadedSumMatrixClassic implements SumMatrix {
         private final int end;
         /**
          * Builds a new {@link Worker}.
+         * 
          * @param matrix
          * @param start
          * @param end
@@ -62,7 +66,7 @@ public class MultiThreadedSumMatrixClassic implements SumMatrix {
         final int size = matrix.length % this.numThreads + matrix.length / this.numThreads;
         int finalPos;
         for (int i = 0; i < matrix.length; i += size) {
-            finalPos = (i + size) < matrix.length ? size : matrix.length - i - 1;
+            finalPos = (i + size) <= matrix.length ? size + i : matrix.length;
             workers.add(new Worker(matrix, i, finalPos));
         }
         for (final Worker worker: workers) {
@@ -72,13 +76,11 @@ public class MultiThreadedSumMatrixClassic implements SumMatrix {
         for (final Worker worker: workers) {
             try {
                 worker.join();
-                System.out.println(worker.getResult());
                 sum += worker.getResult();
             } catch (InterruptedException e) {
                 throw new IllegalStateException(e);
             }
         }
-        System.out.println(sum);
         return sum;
     }
 }
